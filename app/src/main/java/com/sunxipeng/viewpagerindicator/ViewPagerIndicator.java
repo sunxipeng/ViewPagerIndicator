@@ -100,10 +100,8 @@ public class ViewPagerIndicator extends LinearLayout
 		super(context, attrs);
 
 		// 获得自定义属性，tab的数量
-		TypedArray a = context.obtainStyledAttributes(attrs,
-				R.styleable.ViewPagerIndicator);
-		mTabVisibleCount = a.getInt(R.styleable.ViewPagerIndicator_item_count,
-				COUNT_DEFAULT_TAB);
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ViewPagerIndicator);
+		mTabVisibleCount = a.getInt(R.styleable.ViewPagerIndicator_item_count, COUNT_DEFAULT_TAB);
 		if (mTabVisibleCount < 0)
 			mTabVisibleCount = COUNT_DEFAULT_TAB;
 		a.recycle();
@@ -148,8 +146,7 @@ public class ViewPagerIndicator extends LinearLayout
 		initTriangle();
 
 		// 初始时的偏移量
-		mInitTranslationX = getWidth() / mTabVisibleCount / 2 - mTriangleWidth
-				/ 2;
+		mInitTranslationX = getWidth() / mTabVisibleCount / 2 - mTriangleWidth / 2;
 	}
 
 	/**
@@ -186,30 +183,9 @@ public class ViewPagerIndicator extends LinearLayout
 
 	}
 
-	/**
-	 * 对外的ViewPager的回调接口
-	 * 
-	 * @author zhy
-	 * 
-	 */
-	public interface PageChangeListener
-	{
-		public void onPageScrolled(int position, float positionOffset,
-								   int positionOffsetPixels);
 
-		public void onPageSelected(int position);
 
-		public void onPageScrollStateChanged(int state);
-	}
 
-	// 对外的ViewPager的回调接口
-	private PageChangeListener onPageChangeListener;
-
-	// 对外的ViewPager的回调接口的设置
-	public void setOnPageChangeListener(PageChangeListener pageChangeListener)
-	{
-		this.onPageChangeListener = pageChangeListener;
-	}
 
 	// 设置关联的ViewPager
 	public void setViewPager(ViewPager mViewPager, int pos)
@@ -219,45 +195,19 @@ public class ViewPagerIndicator extends LinearLayout
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener()
 		{
 			@Override
-			public void onPageSelected(int position)
-			{
+			public void onPageSelected(int position) {
 				// 设置字体颜色高亮
 				resetTextViewColor();
-				highLightTextView(position);
-
-				// 回调
-				if (onPageChangeListener != null)
-				{
-					onPageChangeListener.onPageSelected(position);
-				}
-			}
+				highLightTextView(position);}
 
 			@Override
-			public void onPageScrolled(int position, float positionOffset,
-					int positionOffsetPixels)
-			{
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 				// 滚动
 				scroll(position, positionOffset);
-
-				// 回调
-				if (onPageChangeListener != null)
-				{
-					onPageChangeListener.onPageScrolled(position,
-							positionOffset, positionOffsetPixels);
-				}
-
 			}
 
 			@Override
-			public void onPageScrollStateChanged(int state)
-			{
-				// 回调
-				if (onPageChangeListener != null)
-				{
-					onPageChangeListener.onPageScrollStateChanged(state);
-				}
-
-			}
+			public void onPageScrollStateChanged(int state) {}
 		});
 		// 设置当前页
 		mViewPager.setCurrentItem(pos);
@@ -357,11 +307,7 @@ public class ViewPagerIndicator extends LinearLayout
 	 */
 	public void scroll(int position, float offset)
 	{
-		/**
-		 * <pre>
-		 *  0-1:position=0 ;1-0:postion=0;
-		 * </pre>
-		 */
+
 		// 不断改变偏移量，invalidate
 		mTranslationX = getWidth() / mTabVisibleCount * (position + offset);
 
